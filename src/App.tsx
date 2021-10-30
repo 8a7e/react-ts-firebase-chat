@@ -1,24 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createContext } from "react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+import { Alert, Snackbar } from "@mui/material";
+
+import MainLayout from "./layouts/main";
+
+import { firebaseAPI } from "./API";
+import { publicRoutes, privateRoutes } from "./routes";
+
+import { UserType } from "./types";
+
+import "./App.css";
+
+interface ContextType {
+  user: UserType;
+}
+
+export const Context = createContext({} as ContextType);
 
 function App() {
+  const [user, loading, error] = useAuthState(firebaseAPI.auth);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Context.Provider value={{ user }}>
+        <BrowserRouter>
+          <MainLayout user={user} loading={loading}>
+            {user ? (
+              <Switch>
+                {publicRoutes.map(({ path, Component }) => (
+                  <Route path={path} component={Component} exact={true} />
+                ))}
+                <Redirect to={"/"} />
+              </Switch>
+            ) : (
+              <Switch>
+                {privateRoutes.map(({ path, Component }) => (
+                  <Route path={path} component={Component} exact={true} />
+                ))}
+                <Redirect to={"/"} />
+              </Switch>
+            )}
+          </MainLayout>
+          <Snackbar open={error} autoHideDuration={5000}>
+            <Alert severity="error" sx={{ width: "100%" }}>
+              An error has occurred, please try again.
+            </Alert>
+          </Snackbar>
+        </BrowserRouter>
+      </Context.Provider>
     </div>
   );
 }
