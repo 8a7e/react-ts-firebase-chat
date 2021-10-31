@@ -3,7 +3,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import {
   Button,
-  Grid,
   TextField,
   Paper,
   Box,
@@ -32,46 +31,37 @@ function Chat() {
   };
 
   return (
-    <Container>
-      <Paper sx={{ marginTop: 1, padding: "10px" }}>
-        <Grid container justifyContent={"space-between"} minWidth={"100%"}>
-          <Grid>
-            <Box
-              sx={{
-                height: "70vh",
-                overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                width: "500px",
-              }}
-            >
-              {loading && <CircularProgress />}
-              {messages?.map((message) => (
-                <Message message={message} />
-              ))}
-            </Box>
-          </Grid>
-          <Grid mt={2} width="600px">
-            <TextField
-              value={message}
-              onChange={(e) => setMessage(e.currentTarget.value)}
-              label="Message"
-              variant="outlined"
-              multiline
-              maxRows={2}
-              fullWidth
-            />
-            <Button
-              sx={{ mt: 1 }}
-              fullWidth
-              variant="contained"
-              startIcon={<SendIcon />}
-              onClick={sendMessage}
-            >
-              Send
-            </Button>
-          </Grid>
-        </Grid>
+    <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Paper variant="outlined" sx={{ my: { xs: 1 }, height: "82vh" }}>
+        <Box sx={{ maxHeight: "85%", overflow: "auto", p: 1 }}>
+          {loading && <CircularProgress />}
+          {messages?.map(
+            (message) =>
+              message.createdAt && (
+                <Message key={message.createdAt.toString()} message={message} />
+              )
+          )}
+        </Box>
+        <Box sx={{ pl: 1, pr: 1 }}>
+          <TextField
+            value={message}
+            onChange={(e) => setMessage(e.currentTarget.value)}
+            label="Message"
+            variant="outlined"
+            multiline
+            maxRows={2}
+            fullWidth
+          />
+          <Button
+            sx={{ mt: 1 }}
+            fullWidth
+            variant="contained"
+            startIcon={<SendIcon />}
+            onClick={sendMessage}
+          >
+            Send
+          </Button>
+        </Box>
       </Paper>
     </Container>
   );

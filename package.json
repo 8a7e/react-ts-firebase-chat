@@ -1,4 +1,5 @@
 {
+  "homepage": "https://8a7e.github.io/react-ts-firebase-chat",
   "name": "react-ts-firebase-chat",
   "version": "0.1.0",
   "private": true,
@@ -53,6 +54,7 @@
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
     "eslint-config-react-app": "^6.0.0",
+    "gh-pages": "^3.2.3",
     "prettier": "2.4.1"
   }
 }

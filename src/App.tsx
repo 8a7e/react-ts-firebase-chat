@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { Alert, Snackbar } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 
 import MainLayout from "./layouts/main";
 
@@ -10,8 +11,6 @@ import { firebaseAPI } from "./API";
 import { publicRoutes, privateRoutes } from "./routes";
 
 import { UserType } from "./types";
-
-import "./App.css";
 
 interface ContextType {
   user: UserType;
@@ -25,19 +24,30 @@ function App() {
   return (
     <div>
       <Context.Provider value={{ user }}>
+        <CssBaseline />
         <BrowserRouter>
           <MainLayout user={user} loading={loading}>
             {user ? (
               <Switch>
                 {publicRoutes.map(({ path, Component }) => (
-                  <Route path={path} component={Component} exact={true} />
+                  <Route
+                    key={path}
+                    path={path}
+                    component={Component}
+                    exact={true}
+                  />
                 ))}
                 <Redirect to={"/"} />
               </Switch>
             ) : (
               <Switch>
                 {privateRoutes.map(({ path, Component }) => (
-                  <Route path={path} component={Component} exact={true} />
+                  <Route
+                    key={path}
+                    path={path}
+                    component={Component}
+                    exact={true}
+                  />
                 ))}
                 <Redirect to={"/"} />
               </Switch>
